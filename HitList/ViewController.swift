@@ -21,6 +21,34 @@ class ViewController: UIViewController {
         title = "The List"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        //grab reference to its persistent container to get your hands on its NSManagedObjectContxt
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+    
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        //fetches all objects of entity Person
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "Person")
+        
+        do{
+            //fetch returns an array of managed objects meeting the criteria specifiede by the fetchRequest
+            people = try managedContext.fetch(fetchRequest)
+        }catch let error as NSError {
+            print("Could not Fetch. \(error), \(error.userInfo)")
+        }
+        
+    }
+    
+    
+    
+    
+    
 
     @IBAction func addName(_ sender: Any) {
         
